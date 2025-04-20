@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Webex Assistant Deployment Guide</title>
+  <style>
+    /* Base Styling */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #111;
+      color: #eee;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+    }
+  
+    /* Header */
+    header {
+      margin-left: 300px;
+      padding: 30px 40px;
+      background: #000;
+      border-bottom: 1px solid #333;
+    }
+  
+    header h1 {
+      color: #66d9ef;
+      font-size: 28px;
+      margin: 0;
+    }
+  
+    header p {
+      color: #bbb;
+      font-size: 14px;
+      margin-top: 8px;
+    }
+  
+    /* Sidebar Navigation */
+    nav {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 250px;
+      height: 100%;
+      background: #1f1f1f;
+      padding: 20px;
+      overflow-y: auto;
+      border-right: 1px solid #444;
+    }
+  
+    nav h2 {
+      color: #66d9ef;
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+  
+    nav a {
+      display: block;
+      margin: 10px 0;
+      color: #ccc;
+      text-decoration: none;
+      transition: color 0.3s, background-color 0.3s;
+      padding: 5px 10px;
+      border-radius: 4px;
+    }
+  
+    nav a:hover,
+    nav a.active {
+  background-color: #2a2a2a;
+  color: #66d9ef;
+  font-weight: bold;
+}
+
+  
+    /* Main Content */
+    .content {
+      margin-left: 270px;
+      padding: 40px;
+      max-width: 1000px;
+    }
+  
+    h2 {
+      color: #66d9ef;
+      border-bottom: 1px solid #444;
+      padding-bottom: 5px;
+      margin-top: 40px;
+    }
+  
+    section {
+  background-color: #121212;
+  padding: 30px;
+  border-radius: 12px;
+  margin-bottom: 60px;
+  box-shadow: 0 0 12px rgba(0,0,0,0.1);
+}
+
+  
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+  
+    table, th, td {
+      border: 1px solid #444;
+    }
+  
+    th {
+      background: #333;
+      color: #eee;
+      padding: 10px;
+      text-align: left;
+    }
+  
+    td {
+      background: #1a1a1a;
+      color: #ddd;
+      padding: 10px;
+    }
+  
+    /* Code Blocks */
+    pre, code {
+      background-color: #222;
+      color: #8fdbff;
+      padding: 10px;
+      border-radius: 5px;
+      overflow-x: auto;
+      font-family: 'Courier New', monospace;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+  
+    /* Blockquotes / Alerts */
+    blockquote {
+      background-color: #1a1a1a;
+      border-left: 4px solid #66d9ef;
+      padding: 15px;
+      margin: 20px 0;
+      color: #cce7ff;
+    }
+  
+    /* Scrollbar (WebKit only) */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+  
+    ::-webkit-scrollbar-track {
+      background: #1a1a1a;
+    }
+  
+    ::-webkit-scrollbar-thumb {
+      background-color: #444;
+      border-radius: 4px;
+    }
+  
+    ::-webkit-scrollbar-thumb:hover {
+      background: #666;
+    }
+    .copy-btn {
+  background: #333;
+  border: none;
+  color: #ccc;
+  padding: 5px 10px;
+  float: right;
+  cursor: pointer;
+  border-radius: 4px;
+}
+.code-block-wrapper {
+  position: relative;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #333;
+  border: none;
+  color: #ccc;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 12px;
+  transition: background 0.3s;
+}
+
+.copy-btn:hover {
+  background: #555;
+  color: #fff;
+}
+  </style>
+  
+  
+</head>
+<body>
+  <nav>
+    <h2>Sections</h2>
+    <a href="#overview">Component Overview</a>
+    <a href="#flow">Bot Flow</a>
+    <a href="#setup">Webex Developer Setup</a>
+    <a href="#github">GitHub Setup</a>
+    <a href="#project">Project Files</a>
+    <a href="#push">Push Your Code to GitHub </a>
+    <a href="#google">Google Sheets Integration</a>
+    <a href="#render">Render Deployment</a>
+    <a href="#webhook">Webhook Registration</a>
+    <a href="#curl">cURL Integration</a>
+    <a href="#nodecurl">Node.js Webhook Creator</a>
+    <a href="#filecreator">Node.js File Creators</a>
+    <a href="#permissions">Permissions & Testing</a>
+    <a href="#logging">Logging & Security</a>
+    <a href="#troubleshooting">Troubleshooting</a>
+    <a href="#examples">Command Examples</a>
+  </nav>
+
+  <header>
+    <h1>🚀 AI Webex Assistant Deployment & Automation Guide</h1>
+    <p>Build, deploy, and scale your Webex bot using GitHub, Render, and Google APIs.</p>
+  </header>
+
+  <div class="content">
+  
+  
+  
+  
+  
+<section id="overview">
+  <h2>🔧 Component Overview</h2>
+  <table>
+    <thead>
+      <tr>
+        <th><strong>Component</strong></th>
+        <th><strong>Purpose</strong></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>GitHub</strong></td>
+        <td>
+          🗂️ <strong>Stores your source code and version history</strong><br>
+          - Think of GitHub as your code’s home base.<br>
+          - All your bot logic (like <code>bot.js</code>, <code>sheet.js</code>, <code>package.json</code>, etc.) lives here.<br>
+          - Every change is tracked, and it integrates directly with Render for auto-deploy.
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Render</strong></td>
+        <td>
+          🚀 <strong>Runs your bot as a live web service</strong><br>
+          - Render acts like your bot’s engine room.<br>
+          - It pulls the code from GitHub and hosts it in a Node.js environment.<br>
+          - Provides a <strong>public HTTPS endpoint</strong> (e.g., <code>https://yourbot.onrender.com/webhook</code>) where Webex can send events.<br>
+          - Executes <code>bot.js</code> to process each event.
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Webex</strong></td>
+        <td>
+          🔔 <strong>Triggers your bot with real-time events</strong><br>
+          - Webex sends webhook events to your Render-hosted <code>/webhook</code> endpoint whenever something happens (like a new message in a room).<br>
+          - Your bot must be registered in the <a href="https://developer.webex.com/" target="_blank">Webex Developer Portal</a> with this endpoint.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="flow">
+  <h2>📥 Bot Flow</h2>
+  <table>
+    <thead>
+      <tr>
+        <th><strong>Component</strong></th>
+        <th><strong>Action</strong></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Webex</strong></td><td>Sends a <code>messages</code> event to Render</td></tr>
+      <tr><td><strong>Render</strong></td><td>Receives it at <code>/webhook</code>, runs <code>bot.js</code></td></tr>
+      <tr><td><strong>bot.js</strong></td><td>Parses <code>/handoff</code>, calls <code>sheet.js.appendRow()</code></td></tr>
+      <tr><td><strong>sheet.js</strong></td><td>Authenticates with Google API and writes to Sheet</td></tr>
+      <tr><td><strong>Google Sheet</strong></td><td>Updates with new customer handoff info</td></tr>
+      <tr><td><strong>Webex (optional)</strong></td><td>Sends confirmation reply back in the chat</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="setup">
+  <h2>💻 Webex Developer Setup</h2>
+  <ol>
+    <li>Go to the <a href="https://developer.webex.com/my-apps" target="_blank">Webex Developer Portal – My Apps</a></li>
+    <li>Click <strong>Create a New App</strong> → <strong>Bot</strong></li>
+    <li>Fill in the following fields:
+      <ul>
+        <li><strong>Name:</strong> AI Webex Assistant</li>
+        <li><strong>Bot Username:</strong> Must end with <code>@webex.bot</code></li>
+        <li><strong>Icon:</strong> Upload an image</li>
+        <li><strong>Description:</strong> e.g., "Automates CS handoffs, flags risk, and more"</li>
+      </ul>
+    </li>
+    <li>Click <strong>Add Bot</strong> and copy the Bot Access Token</li>
+    <li>Use this token in your Render environment as <code>WEBEX_ACCESS_TOKEN</code></li>
+  </ol>
+</section>
+
+<section id="github">
+  <h2>🔐 GitHub Setup</h2>
+  <ol>
+    <li>Go to <a href="https://github.com/" target="_blank">GitHub</a> and sign in or sign up.</li>
+    <li>Click <strong>New Repository</strong> from your dashboard.</li>
+    <li>Name it (e.g., <code>ai-webex-assistant</code>).</li>
+    <li>Set visibility to <strong>Public</strong> or <strong>Private</strong>, depending on your team needs.</li>
+    <li>Click <strong>Create Repository</strong>.</li>
+  </ol>
+</section>
+
+
+    
+    
+    
+    <section id="push">
+  <h2>📊📤 Push Your Code to GitHub (Mac Terminal or VS Code Terminal)</h2>
+
+  <p>If you haven't pushed your code yet, follow these steps using either:</p>
+  <ul>
+    <li>✅ The Terminal app on macOS</li>
+    <li>✅ The built-in terminal in Visual Studio Code</li>
+  </ul>
+
+  <h3>📥 Initialize Git and Push to GitHub</h3>
+  <div class="code-block-wrapper">
+    <button class="copy-btn">📋 Copy</button>
+    <pre><code>
+  git init
+  git add .
+  git commit -m "Initial commit"
+    </code></pre>
+  </div>
+
+  <h3>💡 Explanation:</h3>
+  <table>
+    <thead>
+      <tr>
+        <th><strong>Command</strong></th>
+        <th><strong>What It Does</strong></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><code>git init</code></td><td>Initializes a new Git repository in your project folder</td></tr>
+      <tr><td><code>git add .</code></td><td>Stages all current files for commit</td></tr>
+      <tr><td><code>git commit -m "Initial commit"</code></td><td>Creates your first commit</td></tr>
+      <tr><td><code>git remote add origin ...</code></td><td>Connects your local repository to the remote one on GitHub</td></tr>
+      <tr><td><code>git push -u origin main</code></td><td>Pushes your code and sets the default branch for future pushes</td></tr>
+    </tbody>
+  </table>
+</section>
+
+    
+    
+    
+    
+    
+    
+     
+
+    
+    <section id="google">
+  <h2>📊 Google Sheets Integration</h2>
+  <ol>
+    <li>Go to the <a href="https://console.cloud.google.com/" target="_blank">Google Cloud Console</a></li>
+    <li>Create a new project (or select an existing one)</li>
+    <li>Enable the following APIs:
+      <ul>
+        <li>✅ <strong>Google Sheets API</strong></li>
+        <li>✅ <strong>Google Drive API</strong> (required for file-level permissions)</li>
+      </ul>
+    </li>
+    <li>Go to <strong>IAM & Admin &gt; Service Accounts</strong></li>
+    <li>Click <strong>Create Service Account</strong>
+      <ul><li>Name it something like <code>sheets-access-bot</code></li></ul>
+    </li>
+    <li>After creating it:
+      <ul>
+        <li>Go to the <strong>Keys</strong> tab</li>
+        <li>Click <strong>Add Key</strong> → <strong>Create new key</strong> → Choose <strong>JSON</strong></li>
+        <li>This will download a <code>.json</code> file — save it safely</li>
+        <li>Use its contents as your <code>GOOGLE_SERVICE_ACCOUNT</code> variable in Render</li>
+      </ul>
+    </li>
+  </ol>
+
+  <h3>📄 Share Access to the Sheet</h3>
+  <ol>
+    <li>Open the Google Sheet you want to update via the bot</li>
+    <li>Click <strong>Share</strong>, and give <strong>Editor</strong> access to the service account’s email<br>
+      <em>Example: <code>sheets-access-bot@yourproject.iam.gserviceaccount.com</code></em>
+    </li>
+  </ol>
+
+  <h2>🧠 Sample <code>sheet.js</code> Code (Minimal, Clean, Working)</h2>
+ 
+ 
+  <div class="code-block-wrapper">
+    <button class="copy-btn">📋 Copy</button>
+    <pre><code class="language-javascript">
+  const { google } = require('googleapis');
+  
+  const auth = new google.auth.GoogleAuth({
+    credentials: JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT),
+    scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+  });
+  
+  const sheets = google.sheets({ version: 'v4', auth });
+  
+  async function appendRow(spreadsheetId, values) {
+    try {
+      await sheets.spreadsheets.values.append({
+        spreadsheetId,
+        range: 'Sheet1!A1',
+        valueInputOption: 'USER_ENTERED',
+        requestBody: {
+          values: [values], // e.g., ['CustomerABC', 'ARR $100K']
+        },
+      });
+      console.log("✅ Row appended successfully");
+    } catch (error) {
+      console.error("❌ Google Sheets append error:", error.message);
+    }
+  }
+  
+  module.exports = { appendRow };
+    </code></pre>
+  </div>
+  
+
+  <h3>🧪 Sample Usage in <code>bot.js</code></h3>
+
+
+  <div class="code-block-wrapper">
+    <button class="copy-btn">📋 Copy</button>
+    <pre><code class="language-javascript">
+  const { appendRow } = require('./sheet');
+  
+  // Example usage inside a Webex command handler:
+  await appendRow('YOUR_SPREADSHEET_ID', ['CustomerABC', 'ARR $100K']);
+    </code></pre>
+  </div>
+  
+
+  <blockquote>
+    🔐 <strong>Reminder:</strong> Don’t commit the raw <code>.json</code> file to GitHub.<br>
+    Instead, copy its contents and store it as a secure environment variable in Render under <code>GOOGLE_SERVICE_ACCOUNT</code>.
+  </blockquote>
+</section>
+
+
+<section id="render">
+  <h2>⚙️ Render Deployment</h2>
+
+  <ol>
+    <li>Go to <a href="https://render.com/" target="_blank">Render</a> and sign in or create a new account.</li>
+    <li>Click <strong>New → Web Service</strong> from your Render dashboard.</li>
+    <li>Under <strong>Connect a Repository</strong>, click <strong>Authorize GitHub</strong> (if you haven’t already).</li>
+    <li>Grant access to the repo where your Webex Assistant bot code lives.</li>
+    <li>Select the repository from the list and proceed to configuration.</li>
+  </ol>
+
+  <h3>⚙️ Configure the Web Service in Render</h3>
+  <p>On the configuration screen in Render:</p>
+  <ul>
+    <li><strong>Name:</strong> Give your service a unique name (e.g., <code>ai-webex-bot</code>).</li>
+    <li><strong>Region:</strong> Choose the region closest to your users (e.g., <code>Oregon (US West)</code> or <code>Frankfurt (EU Central)</code>).</li>
+    <li><strong>Branch:</strong> Select <code>main</code> (or whichever branch contains your working code).</li>
+    <li><strong>Build Command:</strong>
+        <div class="code-block-wrapper">
+          <button class="copy-btn">📋 Copy</button>
+          <pre><code>npm install</code></pre>
+        </div>
+      </li>
+      
+      <li><strong>Start Command:</strong>
+        <div class="code-block-wrapper">
+          <button class="copy-btn">📋 Copy</button>
+          <pre><code>node bot.js</code></pre>
+        </div>
+      </li>
+      
+    <li><strong>Environment:</strong> Select <strong>Node</strong> from the dropdown.</li>
+  </ul>
+
+  <h3>🔐 Set Environment Variables in Render</h3>
+  <p>In the <strong>Environment</strong> section of your Render Web Service setup, add the following variables:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th><strong>Key</strong></th>
+        <th><strong>Value Description</strong></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>WEBEX_ACCESS_TOKEN</code></td>
+        <td>Your bot's access token from the Webex Developer Portal</td>
+      </tr>
+      <tr>
+        <td><code>GOOGLE_SERVICE_ACCOUNT</code></td>
+        <td>The full contents of your downloaded <code>service-account.json</code> file</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <blockquote>
+    ✅ <strong>Important Notes:</strong><br>
+    - Never hardcode credentials in your codebase.<br>
+    - Ensure <code>credentials.json</code> is ignored via <code>.gitignore</code>.
+  </blockquote>
+
+  <h3>🚀 Deploy the Service</h3>
+  <ol>
+    <li>After entering your build/start commands and environment variables, click <strong>Create Web Service</strong>.</li>
+    <li>Render will now:
+      <ul>
+        <li>🔁 Clone your GitHub repo</li>
+        <li>📦 Install dependencies using your <code>package.json</code></li>
+        <li>🚀 Launch your app using the specified start command</li>
+      </ul>
+    </li>
+    <li>Once deployment is complete, your bot will be live at the public HTTPS endpoint Render provides (e.g., <code>https://yourbot.onrender.com/webhook</code>).</li>
+  </ol>
+</section>
+
+  
+  <section id="webhook">
+  <h2>🌐 Webhook Registration</h2>
+
+  <details open>
+    <summary>✅ Option 1: GUI (Webex Developer Portal)</summary>
+    <p>
+      Follow these steps to register your bot webhook using the Webex Developer Portal:
+    </p>
+    <ol>
+      <li>Visit the <a href="https://developer.webex.com/" target="_blank">Webex Developer Portal</a></li>
+      <li>Log in with your Webex credentials.</li>
+      <li>Click <strong>Create a Webhook</strong></li>
+      <li>Fill out the form with the following values:</li>
+    </ol>
+    <ul>
+      <li><strong>Name:</strong> e.g., <code>Webex Bot - ECS</code></li>
+      <li><strong>Target URL:</strong> <code>https://yourbot.onrender.com/webhook</code></li>
+      <li><strong>Resource:</strong> <code>messages</code></li>
+      <li><strong>Event:</strong> <code>created</code></li>
+      <li><strong>Secret:</strong> (optional but recommended for validating payloads)</li>
+    </ul>
+    <p>5. Click <strong>Run</strong> to create the webhook.</p>
+  </details>
+</section>
+
+<section id="curl">
+  <h2>📡 cURL Integration</h2>
+
+  <details open>
+    <summary>✅ Option 2: cURL Command</summary>
+    <p>Use this method if you prefer registering the webhook via terminal or shell script:</p>
+
+
+    <div class="code-block-wrapper">
+        <button class="copy-btn">📋 Copy</button>
+        <pre><code class="language-bash">
+      curl -X POST https://webexapis.com/v1/webhooks \
+        -H "Authorization: Bearer YOUR_BOT_TOKEN" \
+        -H "Content-Type: application/json" \
+        -d '{
+          "name": "My Webex Bot",
+          "targetUrl": "https://your-load-balancer/webhook",
+          "resource": "messages",
+          "event": "created",
+          "secret": "shared-secret-123"
+        }'
+        </code></pre>
+      </div>
+
+      
+  </details>
+</section>
+
+
+<section id="nodecurl">
+  <h2>🛠️ Node.js Webhook Creator</h2>
+
+  <p>✅ Option 3 is to create the webhook programmatically using Node.js. This is ideal for CI/CD pipelines or automated deployment setups.</p>
+
+  <p>Create a file called <code>createWebhook.js</code> with the following:</p>
+
+ 
+</section>
+
+<section id="filecreator">
+  <h2>📂 Auto-Generate Files with Node.js</h2>
+
+  <p>This Node.js script generates essential project files for your Webex bot:</p>
+
+  <div class="code-block-wrapper">
+    <button class="copy-btn">📋 Copy</button>
+    <pre><code class="language-javascript">
+  const fs = require('fs');
+  
+  fs.writeFileSync('.gitignore', 'node_modules\n.env\ncredentials.json\n');
+  fs.writeFileSync('README.md', '# AI Webex Assistant\n\nA Webex bot to automate Customer Success handoffs and risk tracking.');
+  
+  fs.writeFileSync('bot.js', \`const express = require('express');
+  const app = express();
+  app.use(express.json());
+  
+  app.post('/webhook', (req, res) => {
+    console.log('Incoming Webex message:', req.body);
+    res.sendStatus(200);
+  });
+  
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(\`Bot running on port \${PORT}\`);
+  });\`);
+  
+  fs.writeFileSync('sheet.js', \`const { google } = require('googleapis');
+  
+  const auth = new google.auth.GoogleAuth({
+    credentials: JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT),
+    scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+  });
+  
+  const sheets = google.sheets({ version: 'v4', auth });
+  
+  async function logHandoff(data) {
+    await sheets.spreadsheets.values.append({
+      spreadsheetId: 'YOUR_SPREADSHEET_ID',
+      range: 'Sheet1!A1',
+      valueInputOption: 'USER_ENTERED',
+      requestBody: { values: [[data.name, data.arr]] }
+    });
+  }
+  
+  module.exports = { logHandoff };\`);
+  
+  fs.writeFileSync('package.json', JSON.stringify({
+    name: 'ai-webex-assistant',
+    version: '1.0.0',
+    main: 'bot.js',
+    scripts: { start: 'node bot.js' },
+    dependencies: {
+      axios: '^1.4.0',
+      express: '^4.18.2',
+      googleapis: '^132.0.0'
+    }
+  }, null, 2));
+    </code></pre>
+  </div>
+  
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section id="nodecurl">
+  <h2>🛠️ Node.js Webhook Creator</h2>
+
+  <h3>✅ Option 3: Node.js Script (Automated)</h3>
+
+  <p>
+    Use a script like <code>createWebhook.js</code> in your deployment flow to automatically register the webhook if it doesn’t exist.
+    This is ideal for CI/CD pipelines and automated deployment environments.
+  </p>
+
+  <blockquote>
+    <strong>📌 Important:</strong> Without a registered webhook, your bot will not receive any messages from Webex.
+  </blockquote>
+
+  <h3>✅ When to Use Each Webhook Registration Method</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th><strong>Method</strong></th>
+        <th><strong>Best For</strong></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Web UI (Developer Portal)</strong></td>
+        <td>Quick tests, one-off registration, developers new to Webex APIs</td>
+      </tr>
+      <tr>
+        <td><strong>cURL/API</strong></td>
+        <td>Automation via shell scripts, multi-environment setup, CI/CD workflows</td>
+      </tr>
+      <tr>
+        <td><strong>Node.js Script</strong></td>
+        <td>Built-in logic during deployment to auto-create or update webhook registration</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <blockquote>
+    <strong>💡 Tip:</strong> For production environments, we recommend using the API or Node.js script to ensure consistent, repeatable setup — especially during ECS or Render redeployments.
+  </blockquote>
+</section>
+
+    
+    
+    
+    
+    <section id="permissions">
+  <h2>🔒 Permissions & Testing</h2>
+  <p>Ensure your Webex bot has the following OAuth scopes enabled in the Developer Portal:</p>
+  <ul>
+    <li><code>spark:messages_read</code> — required to read incoming messages</li>
+    <li><code>spark:messages_write</code> — required to send messages</li>
+    <li><code>spark:rooms_read</code> — optional, allows room details access</li>
+    <li><code>spark:people_read</code> — optional, allows identifying users by email or ID</li>
+  </ul>
+
+  <blockquote>
+    ⚠️ <strong>Missing any of these may prevent the bot from reading or responding to messages properly.</strong>
+  </blockquote>
+</section>
+
+
+
+
+
+<section id="logging">
+    <h2>🧰 Logging & Security</h2>
+    <ol>
+      <li>Install dependencies locally:
+        <div class="code-block-wrapper">
+          <button class="copy-btn">📋 Copy</button>
+          <pre><code>npm install</code></pre>
+        </div>
+      </li>
+      <li>Start the bot locally:
+        <div class="code-block-wrapper">
+          <button class="copy-btn">📋 Copy</button>
+          <pre><code>node bot.js</code></pre>
+        </div>
+      </li>
+      <li>Expose your local server to the internet using ngrok:
+        <div class="code-block-wrapper">
+          <button class="copy-btn">📋 Copy</button>
+          <pre><code>ngrok http 3000</code></pre>
+        </div>
+      </li>
+      <li>Copy the HTTPS forwarding URL provided by ngrok (e.g., <code>https://abc123.ngrok.io</code>) and use it to register your webhook in testing.</li>
+    </ol>
+  </section>
+  
+
+
+
+
+
+
+
+
+<section id="troubleshooting">
+  <h2>🛠️ Troubleshooting</h2>
+
+  <ul>
+    <li>✅ Use <code>console.log()</code> to log:
+      <ul>
+        <li>Incoming Webex messages</li>
+        <li>Google Sheets write attempts</li>
+        <li>Webhook status (success/failure)</li>
+      </ul>
+    </li>
+    <li>⚠️ Use <code>try...catch</code> blocks to wrap API calls and log descriptive errors.</li>
+    <li>🔄 For production systems, consider adding:
+      <ul>
+        <li>A webhook ping/health endpoint</li>
+        <li>Structured logs with timestamps</li>
+        <li>Alerts if the Sheets API fails or returns rate limits</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h2>🔒 Security Best Practices</h2>
+  <ul>
+    <li>✅ Store tokens and credentials in environment variables — never hardcode them.</li>
+    <li>✅ Add sensitive files to your <code>.gitignore</code>:
+        <div class="code-block-wrapper">
+            <button class="copy-btn">📋 Copy</button>
+            <pre><code>.env
+          credentials.json
+            </code></pre>
+          </div>
+          
+    </li>
+    <li>✅ Limit Google Service Account permissions to only the APIs it needs (Sheets/Drive access).</li>
+  </ul>
+</section>
+
+
+
+
+
+
+<section id="examples">
+  <h2>✅ Command Examples</h2>
+  <p>Include this section to showcase how to trigger your bot, test features, or invoke different commands once deployed. You can add examples like:</p>
+
+  <div class="code-block-wrapper">
+    <button class="copy-btn">📋 Copy</button>
+    <pre><code>/handoff CustomerABC ARR $100K</code></pre>
+  </div>
+  
+  <div class="code-block-wrapper">
+    <button class="copy-btn">📋 Copy</button>
+    <pre><code>/status</code></pre>
+  </div>
+  
+  <div class="code-block-wrapper">
+    <button class="copy-btn">📋 Copy</button>
+    <pre><code>/ping</code></pre>
+  </div>
+  
+</section>
+
+
+<script>
+    document.querySelectorAll('.copy-btn').forEach(button => {
+      button.addEventListener('click', () => {
+        const code = button.nextElementSibling.querySelector('code').innerText;
+        navigator.clipboard.writeText(code).then(() => {
+          button.textContent = '✅ Copied!';
+          setTimeout(() => button.textContent = '📋 Copy', 2000);
+        });
+      });
+    });
+  </script>
+
+
+</div><body>
+    
+</body>
+
+
+
